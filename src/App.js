@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Header from './components/Header/Header';
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import blue from '@material-ui/core/colors/blue';
+import lime from '@material-ui/core/colors/lime';
+import Login from './containers/Login/Login';
+
+const useStyles = makeStyles(theme => ({
+  gridRoot: {
+    textAlign: 'center',
+    justifyContent: 'center'
+  },
+  button: {
+    backgroundColor: blue[500],
+    '&:hover': {
+      backgroundColor: lime[300]
+    }
+  }
+}))
 
 function App() {
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grid container className={classes.gridRoot}>
+      <Grid item xs={12}>
+          <Header />
+      </Grid>
+      <Login />
+    </Grid>
   );
 }
 
