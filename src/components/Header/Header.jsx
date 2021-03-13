@@ -5,9 +5,12 @@ import RegisterButton from './Buttons/RegisterButton/RegisterButton';
 import LoginButton from './Buttons/LoginButton/LoginButton';
 
 const useStyles = makeStyles(theme => ({
+    appBarRoot: {
+        flexGrow: 1
+    },
     typography: {
         display: 'flex',
-        flexGrow: 1,
+        flexGrow: '1',
     },
     headerStyle: {
         display: 'flex',
@@ -18,7 +21,7 @@ const Header = () => {
     const classes = useStyles();
 
     return (
-        <AppBar>
+        <AppBar position="static" className={classes.appBarRoot}>
             <Toolbar>
                 <Typography 
                     variant="h4"

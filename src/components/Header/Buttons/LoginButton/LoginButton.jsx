@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom';
 import lime from '@material-ui/core/colors/lime';
 import red from '@material-ui/core/colors/red';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -22,6 +24,9 @@ const useStyles = makeStyles(theme => ({
         '&:active': {
             backgroundColor: red[200]
         }
+    },
+    link: {
+        textDecoration: "none"
     }
 }))
 
@@ -29,13 +34,14 @@ const LoginButton = () => {
     const classes = useStyles();
 
     return (
-        <Button
-            variant="contained"
-            className={classes.button}
-            onClick={() => console.log("Hello")}
-        >
-            Login
-        </Button>
+        <Link to="/login" className={classes.link}>
+            <Button
+                variant="contained"
+                className={classes.button}
+            >
+                Login
+            </Button>
+        </Link>
     )
 }
 

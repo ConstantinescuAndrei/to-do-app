@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { Button, Grid, Paper, TextField, Typography, CssBaseline, Avatar } from '@material-ui/core'; 
 import { makeStyles } from '@material-ui/styles';
+import { Alert } from '@material-ui/lab';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import grey from '@material-ui/core/colors/grey';
 import lime from '@material-ui/core/colors/lime';
+import { useDispatch } from 'react-redux';
+import { signIn } from '../../Redux/actions';
+import { ContactSupportOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
     gridRoot: {
@@ -19,10 +24,13 @@ const useStyles = makeStyles(theme => ({
         backgroundPosition: "center"
     },
     paper: {
-        margin: theme.spacing("15vh", 4),
+        margin: theme.spacing("25vh", 4),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        [theme.breakpoints.down('sm')]: {
+            margin: theme.spacing("25vh", "20vh")
+        }
     },
     avatar: {
         margin: theme.spacing(1),
@@ -46,6 +54,34 @@ const useStyles = makeStyles(theme => ({
 
 const Login = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const loginLink = "http://localhost:5000/auth/login";
+    const [alert, setAlert] = useState({ severity: '', message: '' })
+    const [user, setUser] = useState({
+        username: '',
+        password: ''
+    })
+
+    const loginHandle = (e) => {
+        e.preventDefault();
+        const temporalyV = user;
+        console.log(user);
+
+        async function login() {
+            const response = await axios.post(loginLink, temporalyV);
+
+            console.log(response.data);
+            if(response.data.validUser) {
+                dispatch(signIn(response.data.user));
+                setAlert({ severity: "success", message: "Login succesfull!!"});
+            }
+            else {
+                setAlert({ severity: "error", message: "Username or password are wrong!!"});
+            }
+        }
+
+        login();
+    }
 
     return (
         <Grid container item className={classes.gridRoot}>
@@ -64,11 +100,12 @@ const Login = () => {
                         margin="normal"
                         required
                         fullWidth 
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
                         autoFocus 
+                        onChange={(e) => setUser({...user, username: e.target.value})}
                     />
                     <TextField
                         variant="outlined"
@@ -80,6 +117,7 @@ const Login = () => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={(e) => setUser({...user, password: e.target.value})}
                     />
                     <Button 
                         type="submit"
@@ -87,10 +125,18 @@ const Login = () => {
                         variant="contained"
                         color="primary"
                         className={classes.submitButton}
+                        onClick={loginHandle}
                     >
                             Sign in
                     </Button>
-                </div>
+                    {
+                        alert.severity ? (
+                            <Alert variant="outlined" severity={alert.severity}>
+                                {alert.message}
+                            </Alert>
+                        ) : ''
+                    }
+                </div>                
             </Grid>     
         </Grid>
     )

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom';
 import red from '@material-ui/core/colors/red';
 import lime from '@material-ui/core/colors/lime';
 
@@ -22,6 +23,9 @@ const useStyles = makeStyles(theme => ({
         '&:active': {
             backgroundColor: red[200]
         }
+    },
+    link: {
+        textDecoration: "none"
     }
 }))
 
@@ -29,13 +33,14 @@ const RegisterButton = () => {
     const classes = useStyles();
 
     return (
-        <Button
-            variant="contained"
-            className={classes.button}
-            onClick={() => console.log("Hello")}
-        >
-            Register
-        </Button>
+        <Link to="/register" className={classes.link}>
+            <Button
+                variant="contained"
+                className={classes.button}
+            >
+                Register
+            </Button>
+        </Link>
     )
 }
 
