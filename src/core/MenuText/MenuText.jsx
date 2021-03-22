@@ -11,7 +11,6 @@ const useStyles = makeStyles({
         justifyContent: "center"
     },
     title: {
-        display: "block",
         marginTop: "15vh",
         display: "flex",
         justifyContent: "center"

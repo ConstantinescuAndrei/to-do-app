@@ -1,62 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Grid, Paper, TextField, Typography, Avatar, CssBaseline } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 import { Alert } from '@material-ui/lab';
-import { grey, lime } from '@material-ui/core/colors';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import axios from 'axios';
-import { signIn } from '../../Redux/actions';
-import { useDispatch } from 'react-redux';
-
-const useStyles = makeStyles((theme) => ({
-    gridRoot: {
-        height: "100vh"
-    },
-    gridSingUp: {
-        backgroundColor: grey[200]
-    },
-    imageStyle: {
-        backgroundImage: "url(https://clickup.com/blog/wp-content/uploads/2019/01/to-do-list-apps.png)",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center"
-    },
-    paper: {
-        margin: theme.spacing("25vh", 4),
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        [theme.breakpoints.down('sm')]: {
-            margin: theme.spacing("25vh", "20vh")
-        },
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: grey[300],
-        color: theme.palette.primary[700],
-    },
-    submitButton: {
-        margin: theme.spacing(3, 0, 2),
-        borderRadius: "10px",
-        backgroundColor: lime[500],
-        '&:hover': {
-            backgroundColor: theme.palette.primary[500],
-            border: '0.5px solid rgb(0, 255, 0)',
-            boxShadow: '10px 10px 10px rgba(0, 255, 0, 0.3)',
-            border: '0.5px solid rgb(0, 255, 0)',
-            transform: "translateY(-2.5px)",
-            transition: "0.5s",
-        },
-        "&:active": {
-            backgroundColor: theme.palette.error.main
-        }
-    }    
-}))
+import { useHistory } from 'react-router-dom';
+import { signIn, signUp } from '../../Redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import useStyles from './style/index';
+import buttonStyles from '../../core/buttons/buttonsStyles/buttonStyles';
 
 const Register = () => {
     const classes = useStyles();
-    const registerLink = "http://localhost:5000/auth/register";
-    const [alert, setAlert] = useState({severity: '', message: ''});
+    const buttonStyle = buttonStyles();
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const [alert, setAlert] = useState({ severity: '', message: '' });
     const [user, setUser] = useState({
         firstName: '',
         lastName: '',
@@ -64,29 +21,33 @@ const Register = () => {
         email: '',
         password: ''
     });
-    const dispatch = useDispatch();
+    const userState = useSelector(state => state.user);
 
-    const submitHandle = (e) => {
+    const handleAlertClose = () => {
+        setAlert({ severity: '', message: '' });
+    } 
+
+    const registerHandle = (e) => {
         e.preventDefault();
         const temporalyV = user;
 
-        async function register() {
-            const response = await axios.post(registerLink, temporalyV);
-
-            console.log(response);
-            dispatch(signIn(response.data));
-
-            if(response.data.registered) {
-                setAlert({severity: "success", message: "Account has been created with success!!!"})
-            }
-            if(!response.data.registered) {
-                setAlert({severity: "error", message: "An accout with your username or email is already created!!!"})
-            }
+        async function fetchUser() {
+            await dispatch(signUp(temporalyV));   
         }
-
-        register();
+        fetchUser();
     }
 
+    useEffect(() => {
+        if(userState.error) {   
+            setAlert({ severity: "error", message: userState.error});
+        } 
+    }, [userState.error])
+
+    useEffect(() => {
+        if(userState.user.firstName) {
+            history.push('/');
+        }
+    }, [userState.user])
     return (
         <Grid container component="main" className={classes.gridRoot}>
             <CssBaseline />
@@ -99,7 +60,7 @@ const Register = () => {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Grid container item xs={12}>
+                    <Grid container item xs={12} spacing={1}>
                         <Grid item xs={12} md={6}>
                             <TextField
                                 variant="outlined"
@@ -110,7 +71,6 @@ const Register = () => {
                                 label="First Name"
                                 name="firstName"
                                 autoComplete="fname"
-                                style={{marginRight: "0.5px"}}
                                 onChange={(e) => setUser({...user, firstName: e.target.value})}
                             />
                         </Grid>
@@ -124,7 +84,6 @@ const Register = () => {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
-                                style={{marginLeft: "0.5px"}}
                                 onChange={(e) => setUser({...user, lastName: e.target.value})}
                             />
                         </Grid>
@@ -170,19 +129,19 @@ const Register = () => {
                         fullWidth 
                         variant="contained"
                         color="primary"
-                        className={classes.submitButton}
-                        onClick={submitHandle}
+                        className={buttonStyle.submitButton}
+                        onClick={registerHandle}
                     >
                             Sign up
-                    </Button>                                      
-                </div>
-                {
-                    alert.severity ? (
-                        <Alert variant="outlined" severity={alert.severity}>
-                            {alert.message}
-                        </Alert>
-                    ) : ""
-                }  
+                    </Button>  
+                    {
+                        alert.severity ? (
+                            <Alert variant="outlined" severity={alert.severity} onClose={handleAlertClose}>
+                                {alert.message}
+                            </Alert>
+                        ) : ''
+                    }                                     
+                </div>             
             </Grid>     
         </Grid>
     )

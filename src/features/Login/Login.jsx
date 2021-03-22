@@ -1,88 +1,50 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button, Grid, Paper, TextField, Typography, CssBaseline, Avatar } from '@material-ui/core'; 
-import { makeStyles } from '@material-ui/styles';
 import { Alert } from '@material-ui/lab';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import grey from '@material-ui/core/colors/grey';
-import lime from '@material-ui/core/colors/lime';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../../Redux/actions';
-import { ContactSupportOutlined } from '@material-ui/icons';
-
-const useStyles = makeStyles(theme => ({
-    gridRoot: {
-        height: "100vh",
-    },
-    gridSignIn: {
-        backgroundColor: grey[200],
-    },
-    imageStyle: {
-        backgroundImage: "url(https://clickup.com/blog/wp-content/uploads/2019/01/to-do-list-apps.png)",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center"
-    },
-    paper: {
-        margin: theme.spacing("25vh", 4),
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        [theme.breakpoints.down('sm')]: {
-            margin: theme.spacing("25vh", "20vh")
-        }
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: grey[300],
-        color: theme.palette.primary[700],
-    },
-    submitButton: {
-        margin: theme.spacing(3, 0, 2),
-        borderRadius: "10px",
-        backgroundColor: lime[500],
-        '&:hover': {
-            backgroundColor: theme.palette.primary[500],
-            border: '0.5px solid rgb(0, 255, 0)',
-            boxShadow: '10px 10px 10px rgba(0, 255, 0, 0.3)',
-            border: '0.5px solid rgb(0, 255, 0)',
-            transform: "translateY(-2.5px)",
-            transition: "0.5s",
-        }
-    }
-}))
+import useStyles from './style';
+import buttonStyles from '../../core/buttons/buttonsStyles/buttonStyles';
 
 const Login = () => {
     const classes = useStyles();
+    const buttonStyle = buttonStyles();
     const dispatch = useDispatch();
-    const loginLink = "http://localhost:5000/auth/login";
+    const history = useHistory();
     const [alert, setAlert] = useState({ severity: '', message: '' })
     const [user, setUser] = useState({
         username: '',
         password: ''
     })
+    const error = useSelector(state => state.user.error);
+
+    const handleAlertClose = () => {
+        setAlert({ severity: '', message: '' });
+    }
 
     const loginHandle = (e) => {
         e.preventDefault();
         const temporalyV = user;
-        console.log(user);
-
-        async function login() {
-            const response = await axios.post(loginLink, temporalyV);
-
-            console.log(response.data);
-            if(response.data.validUser) {
-                dispatch(signIn(response.data.user));
-                setAlert({ severity: "success", message: "Login succesfull!!"});
-            }
-            else {
-                setAlert({ severity: "error", message: "Username or password are wrong!!"});
-            }
+        
+        async function fetchUser() {
+            await dispatch(signIn(temporalyV));
         }
+        fetchUser();
 
-        login();
+        if(!error) {
+            history.push('/');
+        }
     }
 
+    useEffect(() => {
+        if(error) { 
+            console.log(error);    
+            setAlert({ severity: "error", message: error});
+            console.log(alert);
+        } 
+    }, [error])
     return (
         <Grid container item className={classes.gridRoot}>
             <CssBaseline />
@@ -124,14 +86,14 @@ const Login = () => {
                         fullWidth 
                         variant="contained"
                         color="primary"
-                        className={classes.submitButton}
+                        className={buttonStyle.submitButton}
                         onClick={loginHandle}
                     >
                             Sign in
                     </Button>
                     {
                         alert.severity ? (
-                            <Alert variant="outlined" severity={alert.severity}>
+                            <Alert variant="outlined" severity={alert.severity} onClose={handleAlertClose}>
                                 {alert.message}
                             </Alert>
                         ) : ''
