@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
     gridRoot: {
         height: "100vh"
     },
-    gridSingUp: {
+    gridSignUp: {
         backgroundColor: grey[200]
     },
     imageStyle: {

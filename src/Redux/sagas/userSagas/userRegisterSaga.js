@@ -13,9 +13,9 @@ function* fetchUser(action) {
         if(response.registered === false) {
             throw new Error(response.reason);
         }
-        yield put({ type: 'LOGIN_USER_SUCCESS', user: response.user });
+        yield put({ type: 'USER_SUCCESS', user: response.user });
     } catch(e) {
-        yield put({ type: 'LOGIN_USER_FAILED', message: e.message });
+        yield put({ type: 'USER_FAILED', message: e.message });
     }
 }
 

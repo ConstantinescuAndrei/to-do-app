@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 import LoginButton from '../../buttons/LoginButton/LoginButton';
 import RegisterButton from '../../buttons/RegisterButton/RegisterButton';
+import CreateTodoButton from '../../buttons/CreateTodoButton/CreateTodoButton';
 import LogoutButton from '../../buttons/LogoutButton/LogoutButton';
 
 const useStyles = makeStyles({
@@ -25,7 +26,10 @@ const DesktopHeader = () => {
                         <RegisterButton />
                     </Box>
                 ) : (
-                    <LogoutButton />
+                    <Box className={classes.headerStyle}>
+                        <CreateTodoButton />
+                        <LogoutButton />
+                    </Box>
                 )
             }
         </>

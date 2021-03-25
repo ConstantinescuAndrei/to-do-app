@@ -52,7 +52,7 @@ const Register = () => {
         <Grid container component="main" className={classes.gridRoot}>
             <CssBaseline />
             <Grid item sm={false} md={7} className={classes.imageStyle} />
-            <Grid item sm={12} md={5} component={Paper} className={classes.gridSignIn} elevation={6} square>
+            <Grid item sm={12} md={5} component={Paper} className={classes.gridSignUp} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />

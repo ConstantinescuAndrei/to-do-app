@@ -1,26 +1,28 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 import ButtonStyle from '../buttonsStyles/buttonStyles';
-import { useDispatch } from 'react-redux';
-import { logout, deleteTodos } from '../../../Redux/actions';
+import { Link } from 'react-router-dom';
+
+const useStyles = makeStyles({
+    link: {
+        textDecoration: "none"
+    }
+})
 
 const LogoutButton = () => {
     const buttonStyle = ButtonStyle();
-    const dispatch = useDispatch();
-
-    const logoutHandle = () => {
-        dispatch(logout());
-        dispatch(deleteTodos());
-    }
+    const classes = useStyles();
 
     return (
+        <Link to='/create-todo' className={classes.link}>
             <Button
                 variant="contained"
                 className={buttonStyle.submitButton}
-                onClick={logoutHandle}
             >
-                Logout
+                Create new todo
             </Button>
+        </Link>
     )
 }
 

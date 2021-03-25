@@ -10,7 +10,7 @@ const theme = createMuiTheme({
   palette: {
     primary: blue,
     secondary: lightGreen
-  }
+  },
 })
 ReactDOM.render(
   <Provider store={store}>
@@ -23,3 +23,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+// FAST_REFRESH=false

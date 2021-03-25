@@ -1,4 +1,4 @@
-import * as type from '../../types';
+import * as type from '../types';
 
 const initialState = {
     user: {}, 
@@ -14,15 +14,14 @@ const userLoginReducer = (state = initialState, action) => {
                 loading: true,
                 error: null
             }
-        case type.LOGIN_USER_SUCCESS:            
-            console.log(action);
+        case type.USER_SUCCESS:    
             return {
                 ...state,
                 loading: false,
                 error: null,
                 user: action.user
             }
-        case type.LOGIN_USER_FAILED:
+        case type.USER_FAILED:
             return {
                 ...state,
                 loading: false,
@@ -34,7 +33,13 @@ const userLoginReducer = (state = initialState, action) => {
                 ...state,
                 loading: true,
                 error: null   
-            }        
+            }     
+        case type.LOGOUT_USER_REQUEST:
+            return {
+                user: {},
+                laoding: false,
+                error: null
+            }   
         default:
             return state;
     }    
