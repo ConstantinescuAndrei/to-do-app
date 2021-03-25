@@ -34,6 +34,20 @@ export const setTodoComplete = (todo_data) => {
     }
 }
 
+export const createNewTodo = (newTodo) => {
+    return {
+        type: type.CREATE_TODO,
+        payload: newTodo
+    }
+} 
+
+export const deleteTodo = (todo) => {
+    return {
+        type: type.DELETE_TODO,
+        payload: todo
+    }
+}
+
 export const deleteTodos = () => {
     return {
         type: type.TODOS_DELETE

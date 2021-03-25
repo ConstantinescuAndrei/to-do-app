@@ -21,6 +21,19 @@ const todosReducer = (state = initialState, action) => {
                 loading: true,
                 error: null
             }
+        case type.CREATE_TODO:
+            return {
+                ...state,
+                loading: true,
+                todos: [],
+                error: null
+            }
+        case type.DELETE_TODO:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
         case type.TODOS_SUCCESS:
             return {
                 ...state,

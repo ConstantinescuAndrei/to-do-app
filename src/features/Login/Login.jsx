@@ -33,7 +33,7 @@ const Login = () => {
         }
         fetchUser();
 
-        if(!error) {
+        if(error != 'Invalid user or password!') {
             history.push('/');
         }
     }

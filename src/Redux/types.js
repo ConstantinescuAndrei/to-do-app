@@ -9,3 +9,5 @@ export const TODOS_SUCCESS = 'TODOS_SUCCESS';
 export const TODOS_FAILED = 'TODOS_FAILED';
 export const TODOS_DELETE = 'TODOS_DELETE';
 export const SET_TODO_COMPLETE = 'SET_TODO_COMPLETE';
+export const CREATE_TODO = 'CREATE_TODO';
+export const DELETE_TODO = 'DELETE_TODO';

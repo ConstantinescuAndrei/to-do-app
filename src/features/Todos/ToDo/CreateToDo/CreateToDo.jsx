@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Grid, Box, TextField, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { createNewTodo } from '../../../../Redux/actions';
 import ButtonStyle from '../../../../core/buttons/buttonsStyles/buttonStyles';
 import cyan from '@material-ui/core/colors/cyan';
 
@@ -32,6 +34,15 @@ const useStyles = makeStyles(theme => ({
 const CreateToDo = () => {
     const classes = useStyles();
     const buttonStyle = ButtonStyle();
+    const username = useSelector(state => state.user.user.username);
+    const dispatch = useDispatch();
+    const [todo, setTodo] = useState({title: '', content: '', username: username});
+
+    const createTodoHandler = (e) => {
+        e.preventDefault();
+
+        dispatch(createNewTodo(todo));
+    }
 
     return (
         <Grid container>
@@ -49,6 +60,7 @@ const CreateToDo = () => {
                             label="Title"
                             name="title"
                             autoComplete="title"
+                            onChange={(e) => setTodo({...todo, title: e.target.value})}
                             autoFocus 
                         />
                         <TextField 
@@ -60,10 +72,12 @@ const CreateToDo = () => {
                             label="Content"
                             name="content"
                             autoComplete="content"
+                            onChange={(e) => setTodo({...todo, content: e.target.value})}
                             autoFocus 
                         />
                         <Button
                             className={buttonStyle.submitButton}
+                            onClick={createTodoHandler}
                         >
                             Create
                         </Button>

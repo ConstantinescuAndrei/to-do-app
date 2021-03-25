@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent, Typography, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import ChipComponent from '../../../core/ChipComponent/ChipComponent';
+import DeleteTodoButton from '../../../core/buttons/DeleteTodoButton/DeleteTodoButton';
 import cyan from '@material-ui/core/colors/cyan';
 
 const useStyles = makeStyles({
@@ -22,6 +23,7 @@ const ToDo = ({ todo }) => {
                     <Typography>{todo.content}</Typography>
                     <Typography>{todo.date}</Typography>
                     <ChipComponent id={todo._id} username={todo.username} status={todo.status}/>
+                    <DeleteTodoButton id={todo._id} username={todo.username} />
                 </CardContent>
             </Card>
         </>
